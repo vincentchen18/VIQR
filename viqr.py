@@ -10,8 +10,17 @@ from PIL import Image
 def make(): #make the qr code
     pass
 
-def read(): # read a qr code
-    pass
+def read(path): # read a qr code
+    # we have already verified that the file is a real image (according to magic bytes) and now we gotta view it and check for qr codes.
+    image = cv2.imread(path)
+    detector = cv2.QRCodeDetector()
+    data_response, decoded, points, useless_variable = detector.detectAndDecodeMulti(image)
+    if not data_response:
+        return "No QR Codes found."
+    links = [link for link in decoded if link]
+    if not links: # found qr but decoding failed
+        return "QR Decoding failed."
+    return links
 
 def main():
     parser = argparse.ArgumentParser(prog="viqr")
@@ -26,6 +35,8 @@ def main():
     if args.make and args.read is not None:
         print("Please choose either --make or --read.")
         sys.exit()
+    if not args.make and args.read is None: # no action selected
+        print("You are missing an action or a filepath. Would you like to make (-m) or read (-r) a QR Code?")
     if args.read is not None and not args.make: # reading mode
         if args.link is not None or args.embed is not None or args.output is not None or args.size is not None:
             print("Reading a QR Code does not accept the following fields: link, embed, output, size.")
@@ -41,5 +52,7 @@ def main():
         else:
             print("File path does not exist or target path is not a file.")
             sys.exit()
-
+        response = read(args.read)
+        if response == "No QR Codes found.":
+            print(f"The provided image at {args.read} does not seem to have any valid QR codes to read.")
 
