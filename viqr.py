@@ -120,6 +120,7 @@ def main():
             except Exception:
                 print("Please specify a valid integer size in pixels larger than 100.")
                 sys.exit()
+        enc = None
         if args.link is None and args.file is not None: # submit a file but it fails
             if not os.path.isfile(args.file):
                 print(f"The file '{args.file}' does not exist.")
@@ -127,6 +128,7 @@ def main():
             else:
                 f = open(args.file, "r")
                 lines = list(f.read().strip().split("\n"))
+                f.close()
                 if len(lines) > 1:
                     print(f"The file '{args.file}' seems to be multiline. Please select a file with one line only, or use -l to directly use a link.")
                     sys.exit()
