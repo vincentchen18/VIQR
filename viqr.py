@@ -8,7 +8,7 @@ from PIL import Image
 # -s or --size : specify a size (optional) minimum 100 for proper scanning
 #
 def paste_logo(QR_image, logo_path): #helper function for make()
-    logo = Image.open(logo_path)
+    logo = Image.open(logo_path).convert("RGBA")
     qr_width, qr_height = QR_image.size
     logo_width = qr_width //4
     ratio = logo.width / logo.height
@@ -29,7 +29,7 @@ def make(text_to_encode, embed_image, size, output_file): #make the qr code
     if size is not None:
         modules = QR.modules_count
         QR.box_size = max(1, size // (modules + 8)) # adjust code size
-    img = QR.make_image()
+    img = QR.make_image().convert('RGB')
     if embed_image is not None:
         img = paste_logo(img, embed_image)
     img.save(output_file)
@@ -143,4 +143,4 @@ def main():
                 print("Your file does not seem to be a valid image.")
                 sys.exit()
         # if all validation passed:
-        make(enc, args.embed, size, args.output)
+        make(enc, args.embed, args.size, args.output)
