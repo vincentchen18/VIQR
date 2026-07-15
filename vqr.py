@@ -1,4 +1,5 @@
-import argparse
+import argparse, qrcode, cv2
+from PIL import Image
 # initialisation
 # flags:
 # -l or --link : specify a link/data to embed in the qr code or you can also specify a data path
@@ -11,4 +12,6 @@ def main():
     parser.add_argument("-l", "--link")
     parser.add_argument("-e", "--embed")
     parser.add_argument("-o", "--output")
-    parser.add_argument("-v", "--version")
+    parser.add_argument("-s", "--size")
+    args = parser.parse_args()
+    print(args)
