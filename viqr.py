@@ -37,6 +37,7 @@ def main():
         sys.exit()
     if not args.make and args.read is None: # no action selected
         print("You are missing an action or a filepath. Would you like to make (-m) or read (-r) a QR Code?")
+        sys.exit()
     if args.read is not None and not args.make: # reading mode
         if args.link is not None or args.embed is not None or args.output is not None or args.size is not None:
             print("Reading a QR Code does not accept the following fields: link, embed, output, size.")
